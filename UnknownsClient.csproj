@@ -1,0 +1,572 @@
+<Project>
+  <!--
+    Keep NuGet restore and compilation on exactly the same intermediate path.
+    These properties must be defined BEFORE Microsoft.NET.Sdk/Sdk.props is imported.
+  -->
+  <PropertyGroup>
+    <BaseIntermediateOutputPath>$(MSBuildProjectDirectory)\obj\</BaseIntermediateOutputPath>
+    <MSBuildProjectExtensionsPath>$(MSBuildProjectDirectory)\obj\</MSBuildProjectExtensionsPath>
+    <RestoreOutputPath>$(MSBuildProjectDirectory)\obj\</RestoreOutputPath>
+  </PropertyGroup>
+
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <AssemblyName>Unknowns Client</AssemblyName>
+    <RootNamespace>UnknownsCastingUI</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+    <RestoreAdditionalProjectSources>https://api.nuget.org/v3/index.json</RestoreAdditionalProjectSources>
+    <ProjectAssetsFile>$(MSBuildProjectExtensionsPath)project.assets.json</ProjectAssetsFile>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <CameraEdition Condition="'$(CameraEdition)' == ''">Plus</CameraEdition>
+    <DefineConstants Condition="'$(CameraEdition)' == 'Basic'">$(DefineConstants);UNKNOWNS_BASIC</DefineConstants>
+    <DefineConstants Condition="'$(CameraEdition)' == 'Utility'">$(DefineConstants);UNKNOWNS_UTILITY</DefineConstants>
+    <DefineConstants Condition="'$(CameraEdition)' == 'Plus'">$(DefineConstants);UNKNOWNS_PLUS</DefineConstants>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    
+    <!-- Path to Gorilla Tag installation -->
+    <GorillaTagPath Condition="'$(GorillaTagPath)' == ''">C:\Program Files (x86)\Steam\steamapps\common\Gorilla Tag</GorillaTagPath>
+    <ManagedPath Condition="'$(ManagedPath)' == ''">$(GorillaTagPath)\Gorilla Tag_Data\Managed</ManagedPath>
+
+    <!-- Direct SharpMono build: no BepInEx dependency. Harmony is resolved from the single-file Lib.Harmony package. -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Explicit source list: guarantees the SharpMono runtime entry point is compiled even on SDK 10. -->
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GlobalUsings.cs" />
+    <Compile Include="UnknownsCastingUI\CastXray.cs" />
+    <Compile Include="UnknownsCastingUI\Drone\DroneSettings.cs" />
+    <Compile Include="UnknownsCastingUI\Drone\DroneAudio.cs" />
+    <Compile Include="UnknownsCastingUI\Drone\DroneFlight.cs" />
+    <Compile Include="UnknownsCastingUI\Drone\DroneTab.cs" />
+    <Compile Include="UnknownsCastingUI\Drone\DroneFollow.cs" />
+    <Compile Include="UnknownsCastingUI\Audio\MicAmplifier.cs" />
+    <Compile Include="UnknownsCastingUI\Audio\MicMonitor.cs" />
+    <Compile Include="UnknownsCastingUI\Audio\MicProcessor.cs" />
+    <Compile Include="UnknownsCastingUI\Audio\NoiseGateProcessor.cs" />
+    <Compile Include="UnknownsCastingUI\Audio\VoiceChanger.cs" />
+    <Compile Include="UnknownsCastingUI\Audio\VoiceChangerDsp.cs" />
+    <Compile Include="UnknownsCastingUI\Audio\VoiceChangerSettings.cs" />
+    <Compile Include="UnknownsCastingUI\Audio\VoiceRing.cs" />
+    <Compile Include="UnknownsCastingUI\Audio\GameAudioManager.cs" />
+    <Compile Include="UnknownsCastingUI\Audio\LobbyTtsVoiceInjector.cs" />
+    <Compile Include="UnknownsCastingUI\Audio\SoundBoard.cs" />
+    <Compile Include="UnknownsCastingUI\Audio\SoundBoardSynth.cs" />
+    <Compile Include="UnknownsCastingUI\Audio\LocalWindowsTts.cs" />
+    <Compile Include="UnknownsCastingUI\AutoSpec\AutoSpec.cs" />
+    <Compile Include="UnknownsCastingUI\AutoRef\AutoRefManager.cs" />
+    <Compile Include="UnknownsCastingUI\AutoRef\AutoRefSupport.cs" />
+    <Compile Include="UnknownsCastingUI\AutoRef\AutoRefIntegration.cs" />
+    <Compile Include="UnknownsCastingUI\StreamChatIntegration.cs" />
+    <Compile Include="UnknownsCastingUI\Cache\GorillaRigCache.cs" />
+    <Compile Include="UnknownsCastingUI\Core\AntiAFK.cs" />
+    <Compile Include="UnknownsCastingUI\Core\AntiLag.cs" />
+    <Compile Include="UnknownsCastingUI\CosmeticItem.cs" />
+    <Compile Include="UnknownsCastingUI\CosmeticLocation.cs" />
+    <Compile Include="UnknownsCastingUI\CosmeticSpawner.cs" />
+    <Compile Include="UnknownsCastingUI\CustomRig.cs" />
+    <Compile Include="UnknownsCastingUI\Extensions\VRRigExtensions.cs" />
+    <Compile Include="UnknownsCastingUI\Helpers\FontManager.cs" />
+    <Compile Include="UnknownsCastingUI\Helpers\PlayerModDetector.cs" />
+    <Compile Include="UnknownsCastingUI\MainPlugin.cs" />
+    <Compile Include="UnknownsCastingUI\AutoModVoicePatch.cs" />
+    <Compile Include="UnknownsCastingUI\MediaSupport.cs" />
+    <Compile Include="UnknownsCastingUI\DesktopLayoutV12_12.cs" />
+    <Compile Include="UnknownsCastingUI\MonoSharpLoader.cs" />
+    <Compile Include="UnknownsCastingUI\Patches\RecorderPatch.cs" />
+    <Compile Include="UnknownsCastingUI\UIBehaviour.cs" />
+    <Compile Include="UnknownsCastingUI\InGameCameraTablet.cs" />
+    <Compile Include="UnknownsCastingUI\ReffingTablet.cs" />
+    <Compile Include="UnknownsCastingUI\SandBoxTablet.cs" />
+    <Compile Include="UnknownsCastingUI\TabletSwitches.cs" />
+    <Compile Include="UnknownsCastingUI\SandBox\SandBoxArt.cs" />
+    <Compile Include="UnknownsCastingUI\SandBox\SandBoxCatalog.cs" />
+    <Compile Include="UnknownsCastingUI\SandBox\SandBoxCombat.cs" />
+    <Compile Include="UnknownsCastingUI\SandBox\SandBoxFx.cs" />
+    <Compile Include="UnknownsCastingUI\SandBox\SandBoxLiquids.cs" />
+    <Compile Include="UnknownsCastingUI\SandBox\SandBoxNet.cs" />
+    <Compile Include="UnknownsCastingUI\SandBox\SandBoxStyles.cs" />
+    <Compile Include="UnknownsCastingUI\SandBox\SandBoxWorld.cs" />
+    <Compile Include="UnknownsCastingUI\SandBox\SandBoxMinecraft.cs" />
+    <Compile Include="UnknownsCastingUI\SandBox\SandBoxModels.cs" />
+    <Compile Include="UnknownsCastingUI\SandBox\SandBoxNether.cs" />
+    <Compile Include="UnknownsCastingUI\RecordingCapture.cs" />
+    <Compile Include="UnknownsCastingUI\CameraShotAndGreenScreen.cs" />
+    <Compile Include="UnknownsCastingUI\CameraGalleryAndQuickButtons.cs" />
+    <Compile Include="UnknownsCastingUI\KillCam.cs" />
+    <Compile Include="UnknownsCastingUI\CastingRigVisuals.cs" />
+    <Compile Include="UnknownsCastingUI\CastingRigOptionsUI.cs" />
+    <Compile Include="UnknownsCastingUI\PlatformIconLookUI.cs" />
+    <Compile Include="UnknownsCastingUI\WardrobeColor.cs" />
+    <Compile Include="UnknownsCastingUI\UtilityPlayerManager.cs" />
+    <Compile Include="UnknownsCastingUI\HudPreviews.cs" />
+    <Compile Include="UnknownsCastingUI\ExternalNameTags.cs" />
+    <Compile Include="UnknownsCastingUI\WindowAnimations.cs" />
+    <Compile Include="UnknownsCastingUI\FontImport.cs" />
+    <Compile Include="UnknownsCastingUI\CastingAudioMirror.cs" />
+    <Compile Include="UnknownsCastingUI\RigStuffTab.cs" />
+    <Compile Include="UnknownsCastingUI\ExternalUi.cs" />
+    <Compile Include="UnknownsCastingUI\Audio\WasapiOutput.cs" />
+    <Compile Include="UnknownsCastingUI\GameOptimiser.cs" />
+    <Compile Include="UnknownsCastingUI\OptimiseTab.cs" />
+    <Compile Include="UnknownsCastingUI\OptimisePatches.cs" />
+    <Compile Include="UnknownsCastingUI\ExternalHudWindow.cs" />
+    <Compile Include="UnknownsCastingUI\HudExternalOverlay.cs" />
+    <Compile Include="UnknownsCastingUI\CastingPresetExtras.cs" />
+    <Compile Include="UnknownsCastingUI\CastingPresetDefault.cs" />
+    <Compile Include="UnknownsCastingUI\CastingPresetHudDesigns.cs" />
+    <Compile Include="UnknownsCastingUI\CastingReplayViews.cs" />
+    <Compile Include="UnknownsCastingUI\SettingsSearch.cs" />
+    <Compile Include="UnknownsCastingUI\RuntimeLogger.cs" />
+    <Compile Include="UnknownsCastingUI\RenderCompat.cs" />
+    <Compile Include="UnknownsCastingUI\CastingPerformance.cs" />
+    <Compile Include="UnknownsCastingUI\NameTagLivePreview.cs" />
+    <Compile Include="UnknownsCastingUI\CastingQuality.cs" />
+    <Compile Include="UnknownsCastingUI\DesktopKeybinds.cs" />
+    <Compile Include="UnknownsCastingUI\NativeFileDialog.cs" />
+    <Compile Include="UnknownsCastingUI\DesktopUiStyles.cs" />
+    <Compile Include="UnknownsCastingUI\DesktopControlLooks.cs" />
+    <Compile Include="UnknownsCastingUI\UiPerformance.cs" />
+    <Compile Include="UnknownsCastingUI\FrameRateSettings.cs" />
+    <Compile Include="UnknownsCastingUI\DesktopLayouts.cs" />
+    <Compile Include="UnknownsCastingUI\ScoreboardEditor.cs" />
+    <Compile Include="UnknownsCastingUI\BepInExAddonKeys.cs" />
+    <Compile Include="UnknownsCastingUI\SessionsAndLighting.cs" />
+    <Compile Include="UnknownsCastingUI\WardrobeRingAndSounds.cs" />
+    <Compile Include="UnknownsCastingUI\TextFieldGlow.cs" />
+    <Compile Include="UnknownsCastingUI\DesktopSegmented.cs" />
+    <Compile Include="UnknownsCastingUI\PerformanceDisplay.cs" />
+    <Compile Include="UnknownsCastingUI\TeleporterZones.cs" />
+    <Compile Include="UnknownsCastingUI\RoomJoiner.cs" />
+    <Compile Include="UnknownsCastingUI\UiExtras.cs" />
+    <Compile Include="UnknownsCastingUI\ColorWheelControl.cs" />
+    <Compile Include="UnknownsCastingUI\TabletThemeTint.cs" />
+    <Compile Include="UnknownsCastingUI\SpectatorStatus.cs" />
+    <Compile Include="UnknownsCastingUI\HudDragging.cs" />
+    <Compile Include="UnknownsCastingUI\SpringLeaves.cs" />
+    <Compile Include="UnknownsCastingUI\Patches\SelfRigPatches.cs" />
+    <Compile Include="UnknownsCastingUI\Patches\WardrobePreviewPatches.cs" />
+    <Compile Include="UnknownsCastingUI\Patches\WaterSplashPatches.cs" />
+    <Compile Include="UnknownsCastingUI\WardrobeCloneRig.cs" />
+    <Compile Include="UnknownsCastingUI\WardrobeTablet.cs" />
+    <Compile Include="UnknownsCastingUI\WeatherControl.cs" />
+    <Compile Include="UnknownsCastingUI\GameUpdates.cs" />
+    <Compile Include="UnknownsCastingUI\OldUpdates\OldUpdateEngine.cs" />
+    <Compile Include="UnknownsCastingUI\GameSnowFallback.cs" />
+    <Compile Include="UnknownsCastingUI\RigInterpolation.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsShaderSettings.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsCustomSettings.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsCustomFx.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsShaderSystem.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsShaderPasses.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsTagDepthPass.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsKillCamXrayPass.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsSoftwareRT.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsSkyProbe.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsSkyDome.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsClouds.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsSun.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsCulling.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsGrass.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsMetroLights.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsRain.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsTimeCycle.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsLeaves.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsWater.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsRainOcclusion.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsSnow.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsWildlife.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsBatMesh.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsTextures.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsSounds.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsThunder.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsFish.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsFire.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsSplash.cs" />
+    <Compile Include="UnknownsCastingUI\Rendering\UnknownsWaterLife.cs" />
+    <Compile Include="UnknownsCastingUI\ShadersTab.cs" />
+    <Compile Include="UnknownsCastingUI\CustomShadersTab.cs" />
+    <Compile Include="UnknownsCastingUI\LavaUnits.cs" />
+    <Compile Include="UnknownsCastingUI\DesignedHuds.cs" />
+    <Compile Include="UnknownsCastingUI\VrHud.cs" />
+    <Compile Include="UnknownsCastingUI\TabletShaders.cs" />
+    <Compile Include="UnknownsCastingUI\WardrobeDesktop.cs" />
+    <Compile Include="UnknownsCastingUI\UI\AssetBundles\LeaderboardLava.cs" />
+    <Compile Include="UnknownsCastingUI\AudioManagerTab.cs" />
+    <Compile Include="UnknownsCastingUI\SoundBoardTab.cs" />
+    <Compile Include="UnknownsCastingUI\PlayerManager\AnimatedWindowBase.cs" />
+    <Compile Include="UnknownsCastingUI\PlayerManager\PlayerManagerData.cs" />
+    <Compile Include="UnknownsCastingUI\PlayerManager\PlayerManagerWindow.cs" />
+    <Compile Include="UnknownsCastingUI\PlayerManagerBridge.cs" />
+    <Compile Include="UnknownsCastingUI\Security\ProductEdition.cs" />
+    <Compile Include="UnknownsCastingUI\Security\NetworkBadgeManager.cs" />
+    <Compile Include="UnknownsCastingUI\Security\RuntimeGuard.cs" />
+    <Compile Include="UnknownsCastingUI\NativeMediaFoundationRecorder.cs" />
+    <Compile Include="UnknownsCastingUI\UtilityTablet.cs" />
+    <Compile Include="UnknownsUtilitySuite\Runtime\UtilityAddonPanel.cs" Link="UnknownsCastingUI\UtilityAddonPanel.cs" />
+    <Compile Include="UnknownsCastingUI\UnknownAI.cs" />
+    <Compile Include="UnknownsUtilitySuite\UtilityAddonCatalog.cs" Link="UnknownsUtilitySuite\UtilityAddonCatalog.cs" />
+    <Compile Include="UnknownsCastingUI\UI\AssetBundles\ColorCard.cs" />
+    <Compile Include="UnknownsCastingUI\UI\AssetBundles\LeaderboardCard.cs" />
+    <Compile Include="UnknownsCastingUI\UI\AssetBundles\NativeScoreboardPlatformIcons.cs" />
+    <Compile Include="UnknownsCastingUI\UI\AssetBundles\PlatformIconStyles.cs" />
+    <Compile Include="UnknownsCastingUI\UI\AssetBundles\NameTags.cs" />
+    <Compile Include="UnknownsCastingUI\UI\AssetBundles\NameTagRankBadges.cs" />
+    <Compile Include="UnknownsCastingUI\UI\AssetBundles\SkewedCard.cs" />
+    <Compile Include="UnknownsCastingUI\UI\Overlays\MiniMapOverlay.cs" />
+    <Compile Include="UnknownsCastingUI\UI\Overlays\ScoreboardOverlay.cs" />
+    <Compile Include="UnknownsCastingUI\UI\Overlays\ScoreboardDesign.cs" />
+    <Compile Include="UnknownsCastingUI\UI\Overlays\HudDesignHosts.cs" />
+    <Compile Include="UnknownsCastingUI\HudDesignUi.cs" />
+    <Compile Include="UnknownsCastingUI\HudDesignKillFeed.cs" />
+    <Compile Include="UnknownsCastingUI\UI\Overlays\ScoreboardGraphics.cs" />
+    <Compile Include="UnknownsCastingUI\UI\Rendering\ColorImage.cs" />
+    <Compile Include="UnknownsCastingUI\UI\Rendering\SkewedImageRenderer.cs" />
+    <Compile Include="UnknownsCastingUI\Utils\ComponentUtils.cs" />
+    <Compile Include="UnknownsCastingUI\Utils\TOSHandler.cs" />
+    <Compile Include="UnknownsCastingUI\Utils\TimerSystem.cs" />
+      <EmbeddedResource Include="UnknownsCastingUI\SandBox\Models\kenney_objects.txt">
+      <LogicalName>UnknownsCastingUI.SandBox.kenney_objects.txt</LogicalName>
+    </EmbeddedResource>
+      <EmbeddedResource Include="UnknownsCastingUI\SandBox\Models\kenney_blaster_kit.txt">
+      <LogicalName>UnknownsCastingUI.SandBox.kenney_blaster_kit.txt</LogicalName>
+    </EmbeddedResource>
+      <EmbeddedResource Include="UnknownsCastingUI\Images\LavaDistanceGrayBase.png">
+      <LogicalName>UnknownsCastingUI.Images.LavaDistanceGrayBase.png</LogicalName>
+    </EmbeddedResource>
+      <EmbeddedResource Include="UnknownsCastingUI\Images\LavaDistanceMaskedLava.png">
+      <LogicalName>UnknownsCastingUI.Images.LavaDistanceMaskedLava.png</LogicalName>
+    </EmbeddedResource>
+      <EmbeddedResource Include="UnknownsCastingUI\Images\LavaDistanceStyleLava.png">
+      <LogicalName>UnknownsCastingUI.Images.LavaDistanceStyleLava.png</LogicalName>
+    </EmbeddedResource>
+      <EmbeddedResource Include="UnknownsCastingUI\Images\LavaDistanceSimple.png">
+      <LogicalName>UnknownsCastingUI.Images.LavaDistanceSimple.png</LogicalName>
+    </EmbeddedResource>
+      <EmbeddedResource Include="UnknownsCastingUI\Images\SimpleLeaderBoard.png">
+      <LogicalName>UnknownsCastingUI.Images.SimpleLeaderBoard.png</LogicalName>
+    </EmbeddedResource>
+      <EmbeddedResource Include="UnknownsCastingUI\Images\SimpleLeaderBoardColorMask.png">
+      <LogicalName>UnknownsCastingUI.Images.SimpleLeaderBoardColorMask.png</LogicalName>
+    </EmbeddedResource>
+      <EmbeddedResource Include="UnknownsCastingUI\Images\CameraSwitchFront.png">
+      <LogicalName>UnknownsCastingUI.Images.CameraSwitchFront.png</LogicalName>
+    </EmbeddedResource>
+      <EmbeddedResource Include="UnknownsCastingUI\Images\CameraSwitchBack.png">
+      <LogicalName>UnknownsCastingUI.Images.CameraSwitchBack.png</LogicalName>
+    </EmbeddedResource>
+      <EmbeddedResource Include="UnknownsCastingUI\Images\CameraTabIcon.png">
+      <LogicalName>UnknownsCastingUI.Images.CameraTabIcon.png</LogicalName>
+    </EmbeddedResource>
+      <EmbeddedResource Include="UnknownsCastingUI\Images\ToolsTabIcon.png">
+      <LogicalName>UnknownsCastingUI.Images.ToolsTabIcon.png</LogicalName>
+    </EmbeddedResource>
+      <EmbeddedResource Include="UnknownsCastingUI\Images\PresetsTabIcon.png">
+      <LogicalName>UnknownsCastingUI.Images.PresetsTabIcon.png</LogicalName>
+    </EmbeddedResource>
+      <EmbeddedResource Include="UnknownsCastingUI\Images\RecordingTabIcon.png">
+      <LogicalName>UnknownsCastingUI.Images.RecordingTabIcon.png</LogicalName>
+    </EmbeddedResource>
+      <EmbeddedResource Include="UnknownsCastingUI\Images\HudDropdownArrowDown.png">
+      <LogicalName>UnknownsCastingUI.Images.HudDropdownArrowDown.png</LogicalName>
+    </EmbeddedResource>
+      <EmbeddedResource Include="UnknownsCastingUI\Images\HudDropdownArrowRight.png">
+      <LogicalName>UnknownsCastingUI.Images.HudDropdownArrowRight.png</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <!-- Ensures net48 reference assemblies are available to modern dotnet SDKs
+         and forces NuGet restore to generate obj\project.assets.json. -->
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net48" Version="1.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <!-- Compile-time fallbacks. These are NOT copied into the plugin output. -->
+    <PackageReference Include="Lib.Harmony" Version="2.3.3" GeneratePathProperty="true">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <!--
+      Current Gorilla Tag/Unity AudioModule is built against netstandard 2.1.
+      Prefer the game-shipped netstandard facade so net48 MSBuild does not bind
+      UnityEngine.AudioModule to the older 2.0 facade and raise CS1705.
+    -->
+    <Reference Include="netstandard" Condition="Exists('$(ManagedPath)\netstandard.dll')">
+      <HintPath>$(ManagedPath)\netstandard.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+
+    <!-- Managed References -->
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(ManagedPath)\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Security" />
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(ManagedPath)\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="PhotonVoice.API">
+      <HintPath>$(ManagedPath)\PhotonVoice.API.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="PhotonVoice">
+      <HintPath>$(ManagedPath)\PhotonVoice.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="PhotonVoice.PUN">
+      <HintPath>$(ManagedPath)\PhotonVoice.PUN.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="PhotonRealtime">
+      <HintPath>$(ManagedPath)\PhotonRealtime.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="PhotonUnityNetworking">
+      <HintPath>$(ManagedPath)\PhotonUnityNetworking.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Photon3Unity3D">
+      <HintPath>$(ManagedPath)\Photon3Unity3D.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>$(ManagedPath)\Unity.TextMeshPro.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.InputSystem">
+      <HintPath>$(ManagedPath)\Unity.InputSystem.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Collections">
+      <HintPath>$(ManagedPath)\Unity.Collections.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(ManagedPath)\UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(ManagedPath)\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(ManagedPath)\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>$(ManagedPath)\UnityEngine.UIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(ManagedPath)\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>$(ManagedPath)\UnityEngine.AudioModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>$(ManagedPath)\UnityEngine.ImageConversionModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>$(ManagedPath)\UnityEngine.AssetBundleModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestModule">
+      <HintPath>$(ManagedPath)\UnityEngine.UnityWebRequestModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestAudioModule">
+      <HintPath>$(ManagedPath)\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestWWWModule">
+      <HintPath>$(ManagedPath)\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestTextureModule">
+      <HintPath>$(ManagedPath)\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.JSONSerializeModule">
+      <HintPath>$(ManagedPath)\UnityEngine.JSONSerializeModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.VideoModule">
+      <HintPath>$(ManagedPath)\UnityEngine.VideoModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(ManagedPath)\UnityEngine.InputLegacyModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(ManagedPath)\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>$(ManagedPath)\UnityEngine.PhysicsModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>$(ManagedPath)\UnityEngine.AnimationModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ParticleSystemModule">
+      <HintPath>$(ManagedPath)\UnityEngine.ParticleSystemModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.ResourceManager">
+      <HintPath>$(ManagedPath)\Unity.ResourceManager.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Universal.Runtime">
+      <HintPath>$(ManagedPath)\Unity.RenderPipelines.Universal.Runtime.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.Runtime">
+      <HintPath>$(ManagedPath)\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Addressables">
+      <HintPath>$(ManagedPath)\Unity.Addressables.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+</ItemGroup>
+
+  <ItemGroup>
+    <!-- Explicit binary resources with stable manifest names. Build verification checks these names directly. -->
+<EmbeddedResource Include="UnknownsCastingUI\Images\DiscordIcon.png">
+      <LogicalName>UnknownsCastingUI.Images.DiscordIcon.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Images\KofiIcon.png">
+      <LogicalName>UnknownsCastingUI.Images.KofiIcon.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Images\MetaIcon.png">
+      <LogicalName>UnknownsCastingUI.Images.MetaIcon.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Images\MutedMic.png">
+      <LogicalName>UnknownsCastingUI.Images.MutedMic.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Images\SettingsIcon.png">
+      <LogicalName>UnknownsCastingUI.Images.SettingsIcon.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Images\SteamIcon.png">
+      <LogicalName>UnknownsCastingUI.Images.SteamIcon.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Images\UnMutedMic.png">
+      <LogicalName>UnknownsCastingUI.Images.UnMutedMic.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Rendering\Bundles\unknowns_shaders">
+      <LogicalName>UnknownsCastingUI.Rendering.unknowns_shaders</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Images\UnknownIcon.png">
+      <LogicalName>UnknownsCastingUI.Images.UnknownIcon.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Images\UnknownsCameraLogo.png">
+      <LogicalName>UnknownsCastingUI.Images.UnknownsCameraLogo.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Images\OwnerCrown.png">
+      <LogicalName>UnknownsCastingUI.Images.OwnerCrown.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Images\UnknownsCameraDesktopLogo.png">
+      <LogicalName>UnknownsCastingUI.Images.UnknownsCameraDesktopLogo.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Images\Leaderboardv1.png">
+      <LogicalName>UnknownsCastingUI.Images.Leaderboardv1.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Images\UnknownsLeaderBoard.png">
+      <LogicalName>UnknownsCastingUI.Images.UnknownsLeaderBoard.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Images\UnknownsScoreBoard.png">
+      <LogicalName>UnknownsCastingUI.Images.UnknownsScoreBoard.png</LogicalName>
+    </EmbeddedResource>
+<EmbeddedResource Include="UnknownsCastingUI\Images\LeaderboardTaggedTexture.png">
+      <LogicalName>UnknownsCastingUI.Images.LeaderboardTaggedTexture.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Images\LeaderboardColorMask.png">
+      <LogicalName>UnknownsCastingUI.Images.LeaderboardColorMask.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Images\LeaderboardV1ColorMask.png">
+      <LogicalName>UnknownsCastingUI.Images.LeaderboardV1ColorMask.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Images\KillFeedVictimMask.png">
+      <LogicalName>UnknownsCastingUI.Images.KillFeedVictimMask.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Images\KillFeedTemplate.png">
+      <LogicalName>UnknownsCastingUI.Images.KillFeedTemplate.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Images\PlayerFurTexture.png">
+      <LogicalName>UnknownsCastingUI.Images.PlayerFurTexture.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Fonts\Unispace Bd It.otf">
+      <LogicalName>UnknownsCastingUI.Fonts.UnispaceBdIt.otf</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Fonts\Designer.otf">
+      <LogicalName>UnknownsCastingUI.Fonts.Designer.otf</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Fonts\Gotham Ultra.otf" Condition="Exists('UnknownsCastingUI\Fonts\Gotham Ultra.otf')">
+      <LogicalName>UnknownsCastingUI.Fonts.GothamUltra.otf</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Fonts\Gotham Bold.otf" Condition="Exists('UnknownsCastingUI\Fonts\Gotham Bold.otf')">
+      <LogicalName>UnknownsCastingUI.Fonts.GothamBold.otf</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Sounds\DiscordMuted.mp3">
+      <LogicalName>UnknownsCastingUI.Sounds.DiscordMuted.mp3</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Sounds\DiscordUnmuted.mp3">
+      <LogicalName>UnknownsCastingUI.Sounds.DiscordUnmuted.mp3</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Sounds\Girl1Muted.mp3">
+      <LogicalName>UnknownsCastingUI.Sounds.Girl1Muted.mp3</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Sounds\Girl1Unmuted.mp3">
+      <LogicalName>UnknownsCastingUI.Sounds.Girl1Unmuted.mp3</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Sounds\Girl2Muted.mp3">
+      <LogicalName>UnknownsCastingUI.Sounds.Girl2Muted.mp3</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Sounds\Girl2Unmuted.mp3">
+      <LogicalName>UnknownsCastingUI.Sounds.Girl2Unmuted.mp3</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Sounds\ManMuted.mp3">
+      <LogicalName>UnknownsCastingUI.Sounds.ManMuted.mp3</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\Sounds\ManUnmuted.mp3">
+      <LogicalName>UnknownsCastingUI.Sounds.ManUnmuted.mp3</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Target Name="PrintBuildPaths">
+    <Message Importance="High" Text="[PATH] BaseIntermediateOutputPath=$(BaseIntermediateOutputPath)" />
+    <Message Importance="High" Text="[PATH] MSBuildProjectExtensionsPath=$(MSBuildProjectExtensionsPath)" />
+    <Message Importance="High" Text="[PATH] RestoreOutputPath=$(RestoreOutputPath)" />
+    <Message Importance="High" Text="[PATH] ProjectAssetsFile=$(ProjectAssetsFile)" />
+  </Target>
+
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+  <!-- V12.77: standalone Player Manager icons -->
+  <ItemGroup>
+    <EmbeddedResource Include="UnknownsCastingUI\PlayerManager\Assets\DiscordIcon.png"><LogicalName>UnknownsStandalone.Assets.DiscordIcon.png</LogicalName></EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\PlayerManager\Assets\UnknownIcon.png"><LogicalName>UnknownsStandalone.Assets.UnknownIcon.png</LogicalName></EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\PlayerManager\Assets\SteamIcon.png"><LogicalName>UnknownsStandalone.PlayerManager.Assets.SteamIcon.png</LogicalName></EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\PlayerManager\Assets\MetaIcon.png"><LogicalName>UnknownsStandalone.PlayerManager.Assets.MetaIcon.png</LogicalName></EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\PlayerManager\Assets\MonitorIcon.png"><LogicalName>UnknownsStandalone.PlayerManager.Assets.MonitorIcon.png</LogicalName></EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\PlayerManager\Assets\VRControllerIcon.png"><LogicalName>UnknownsStandalone.PlayerManager.Assets.VRControllerIcon.png</LogicalName></EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\PlayerManager\Assets\LocalIcon.png"><LogicalName>UnknownsStandalone.PlayerManager.Assets.LocalIcon.png</LogicalName></EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\PlayerManager\Assets\CrownIcon.png"><LogicalName>UnknownsStandalone.PlayerManager.Assets.CrownIcon.png</LogicalName></EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\PlayerManager\Assets\OnlineIcon.png"><LogicalName>UnknownsStandalone.PlayerManager.Assets.OnlineIcon.png</LogicalName></EmbeddedResource>
+    <EmbeddedResource Include="UnknownsCastingUI\PlayerManager\Assets\OfflineIcon.png"><LogicalName>UnknownsStandalone.PlayerManager.Assets.OfflineIcon.png</LogicalName></EmbeddedResource>
+  </ItemGroup>
+</Project>

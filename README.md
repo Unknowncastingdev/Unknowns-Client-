@@ -7,7 +7,6 @@ weather and shader looks, old-update season packs, and VR tablets (camera, utili
 The desktop launcher **Unknown's Suite** injects the client with SharpMonoInjector, so it doesn't
 need BepInEx. There is also a set of optional BepInEx add-ons.
 
-
 ## Layout
 
 | Folder | What it is |
@@ -57,3 +56,8 @@ dotnet build UnknownsClient.csproj -c Release "-p:GorillaTagPath=D:\steam\steama
   `UnknownsCastingUI/Fonts`, the build embeds them; if not, it builds without them.
 - The old-update season packs live in their own repo, `Unknowncastingdev/Old-gtag-updates`. The
   Update Changer downloads them.
+
+## Third-party code
+
+SharpMonoInjector (https://github.com/warbler/SharpMonoInjector) is MIT licensed. Its code is in
+`UnknownsCameraLauncher/SharpMonoInjector/`, and its licence is in `LICENSE.txt` in that folder.

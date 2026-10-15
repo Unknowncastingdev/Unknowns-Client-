@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "X5pr5561AKc=",
+  "success": true,
+  "projectFilePath": "E:\\UnknownsClient-GitHub\\UnknownsUtilitySuite\\UnknownsUtilitySuite.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Admin\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net48\\1.0.3\\microsoft.netframework.referenceassemblies.net48.1.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

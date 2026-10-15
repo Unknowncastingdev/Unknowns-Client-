@@ -1,0 +1,9 @@
+E:\UnknownsClient-GitHub\.build\utilitysuite\UnknownsUtilitySuite.dll
+E:\UnknownsClient-GitHub\.build\utilitysuite\UnknownsUtilitySuite.pdb
+E:\UnknownsClient-GitHub\UnknownsUtilitySuite\obj\Release\net48\UnknownsUtilitySuite.csproj.AssemblyReference.cache
+E:\UnknownsClient-GitHub\UnknownsUtilitySuite\obj\Release\net48\UnknownsUtilitySuite.GeneratedMSBuildEditorConfig.editorconfig
+E:\UnknownsClient-GitHub\UnknownsUtilitySuite\obj\Release\net48\UnknownsUtilitySuite.AssemblyInfoInputs.cache
+E:\UnknownsClient-GitHub\UnknownsUtilitySuite\obj\Release\net48\UnknownsUtilitySuite.AssemblyInfo.cs
+E:\UnknownsClient-GitHub\UnknownsUtilitySuite\obj\Release\net48\UnknownsUtilitySuite.csproj.CoreCompileInputs.cache
+E:\UnknownsClient-GitHub\UnknownsUtilitySuite\obj\Release\net48\UnknownsUtilitySuite.dll
+E:\UnknownsClient-GitHub\UnknownsUtilitySuite\obj\Release\net48\UnknownsUtilitySuite.pdb
